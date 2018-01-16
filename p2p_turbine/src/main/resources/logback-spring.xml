@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<configuration>
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%-5level] %d{HH:mm:ss.SSS} [%thread] %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!--<appender name="file"-->
+              <!--class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+        <!--<Encoding>UTF-8</Encoding>-->
+        <!--<File>/Users/yuan/log/dubboserver/dubboserver.log</File>-->
+        <!--&lt;!&ndash;<File>/usr/local/logs/dubboserver/dubboserver.log</File>&ndash;&gt;-->
+        <!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+            <!--<FileNamePattern>/home/Test-%d{yyyy-MM-dd}.log-->
+            <!--</FileNamePattern>-->
+            <!--<MaxHistory>10</MaxHistory>-->
+            <!--<TimeBasedFileNamingAndTriggeringPolicy-->
+                    <!--class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">-->
+                <!--<MaxFileSize>5MB</MaxFileSize>-->
+            <!--</TimeBasedFileNamingAndTriggeringPolicy>-->
+        <!--</rollingPolicy>-->
+        <!--<layout class="ch.qos.logback.classic.PatternLayout">-->
+            <!--<pattern>[%-5level] %d{HH:mm:ss.SSS} [%thread] %logger{36} - %msg%n-->
+            <!--</pattern>-->
+        <!--</layout>-->
+    <!--</appender>-->
+
+
+    <appender name="file"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <Prudent>true</Prudent>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            
+            <FileNamePattern>/Users/daijuancen/Desktop/log/p2p.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <!-- keep 60 days worth of history -->
+            <MaxHistory>60</MaxHistory>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %d{yyyy-MM-dd HH:mm:ss} [%p][%c][%M][%L]-> %m%n
+            </Pattern>
+        </layout>
+    </appender>
+
+    <!--<appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+        <!--<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">-->
+            <!--<Encoding>UTF-8</Encoding>-->
+            <!--<File>/Users/yuan/log/p2p/p2p.log</File>-->
+            <!--&lt;!&ndash; rollover daily &ndash;&gt;-->
+            <!--<fileNamePattern>/Users/yuan/log/p2p/p2p.%d{yyyy-MM-dd_HH-mm}.%i.log</fileNamePattern>-->
+            <!--<maxFileSize>50MB</maxFileSize>-->
+            <!--<maxHistory>30</maxHistory>-->
+        <!--</rollingPolicy>-->
+        <!--<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+            <!--<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>-->
+        <!--</encoder>-->
+    <!--</appender>-->
+
+    <!-- 日志级别 -->
+    <root>
+        <!-- 定义了ERROR和INFO级别的日志，分别在FILE文件和控制台输出 -->
+        <level value="error" />
+        <level value="debug" />
+        <level value="warn" />
+        <level value="info" />
+        <appender-ref ref="file" />
+        <appender-ref ref="console" />
+    </root>
+
+    <logger name="com.newland.financial" additivity="false">
+        <level value="info" />
+        <appender-ref ref="file" />
+        <appender-ref ref="console" />
+    </logger>
+
+    <!--<logger name="com.newland.financial.p2p.domain.mapping" additivity="false">-->
+        <!--<level value="debug" />-->
+        <!--<appender-ref ref="file" />-->
+        <!--<appender-ref ref="console" />-->
+    <!--</logger>-->
+
+    <logger name="org.springframework" additivity="false">
+        <level value="info" />
+        <appender-ref ref="file" />
+        <appender-ref ref="console" />
+    </logger>
+
+</configuration>

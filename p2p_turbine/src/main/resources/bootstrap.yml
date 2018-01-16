@@ -1,0 +1,123 @@
+---
+spring:
+    profiles:
+        active: ${SPRING_PROFILES_ACTIVE:dev}
+...
+
+---
+spring:
+    profiles: dev
+    application:
+        name: @project.name@${DEVLOPER_NAME:}
+    cloud:
+        config:
+            uri: http://192.168.10.18:2001/
+    rabbitmq:
+        host: 192.168.10.18
+        port: 5672
+        username: user_admin
+        password: admin123%
+HOSTNAME: ${spring.cloud.client.ipAddress}
+...
+
+---
+spring:
+    profiles: test
+    application:
+        name: @project.name@
+    cloud:
+        config:
+            discovery:
+                enabled: true
+                #profile: {profile.active}
+                #label: master
+                serviceId: P2P-CONFIG-SERVER
+    rabbitmq:
+        host: 10.0.1.42
+        port: 5672
+        username: user_admin
+        password: admin123%
+zipkin:
+    storage:
+        elasticsearch:
+            hosts: 10.0.1.42:9200
+...
+
+---
+spring:
+    profiles: prod
+    application:
+        name: @project.name@
+    cloud:
+        config:
+            discovery:
+                enabled: true
+                #profile: {profile.active}
+                #label: master
+                serviceId: P2P-CONFIG-SERVER
+    rabbitmq:
+        host: 10.0.1.46
+        port: 5672
+        username: user_admin
+        password: admin123%Prod
+
+...
+
+---
+server:
+    port: ${SERVER_PORT:6002}
+...
+
+---
+eureka:
+    instance:
+        #preferIpAddress: true
+        #ip-address: ${spring.cloud.client.ipAddress}
+        #instance-id: ${spring.cloud.client.ipAddress}-${server.port}
+        #appname: ${spring.cloud.client.ipAddress}-${server.port}
+        hostname: ${HOSTNAME}
+        lease-expiration-duration-in-seconds: 40
+        lease-renewal-interval-in-seconds: 20
+        metadata-map:
+            user.name: ${security.user.name}
+            user.password: ${security.user.password}
+            management.context-path: ${management.context-path}
+        metadataMap:
+            user: ${security.user.name}
+            password: ${security.user.password}
+        statusPageUrl: http://${HOSTNAME}:${server.port}/${management.context-path}/info
+        healthCheckUrl: http://${HOSTNAME}:${server.port}/${management.context-path}/health
+        secure-health-check-url: http://${HOSTNAME}:${server.port}/${management.context-path}/health
+    client:
+        serviceUrl:
+            defaultZone: ${ADDITIONAL_EUREKA_SERVER_LIST:http://eurekaserver:1111/eureka/}
+...
+
+---
+spring:
+    cloud:
+        config:
+            profile: ${SPRING_PROFILES_ACTIVE}
+            label: master
+            name: p2p-server
+            #uri: http://localhost:2001/
+            #failFast: true
+            #retry:
+                #max-attempts: 10
+                #initial-interval: 1000
+...
+
+---
+management:
+    #security:
+        #enabled: true
+        #roles: SUPERUSER
+    context-path: /manage
+security:
+    user:
+        name: admin
+        password: cendaijun123!
+    #basic:
+        #enabled: true
+        #path: ${management.context-path}
+...

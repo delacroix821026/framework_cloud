@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd"
+	default-lazy-init="false">
+
+	<!-- 该配置文件无需修改 -->
+	<bean id="org.ohuyo.libra.client.slave.slaveClientService"
+		class="org.ohuyo.libra.client.service.impl.SlaveClientServiceImpl">
+		<property name="slaveMessageService">
+			<ref bean="org.ohuyo.libra.client.slave.slaveMessageService" />
+		</property>
+		<property name="slaveClientConfig">
+			<ref bean="org.ohuyo.libra.client.slave.config" />
+		</property>
+	</bean>
+	<!-- <bean id="libra.client.slave.txnServiceInterceptor" class="org.ohuyo.libra.base.txn.service.TxnServiceInterceptor"> 
+		</bean> <aop:config> <aop:pointcut id="libra.client.slave.txnServicePointcut" 
+		expression="execution(* com.cib.platform.sso.clsum.client.txn.impl.ClientTxnServiceImpl.*(..))" 
+		/> <aop:aspect id="beforeExample" ref="libra.client.slave.txnServiceInterceptor"> 
+		<aop:around pointcut-ref="libra.client.slave.txnServicePointcut" method="around" 
+		/> </aop:aspect> </aop:config> -->
+</beans>
+
+

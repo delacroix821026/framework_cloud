@@ -1,0 +1,117 @@
+---
+spring:
+    profiles:
+        active: ${SPRING_PROFILES_ACTIVE:dev}
+...
+
+---
+spring:
+    profiles: dev
+    application:
+          name: @project.name@${DEVLOPER_NAME:}
+HOSTNAME: ${spring.cloud.client.ipAddress}
+...
+
+---
+spring:
+    profiles: test
+    application:
+        name: @project.name@
+...
+
+---
+spring:
+    profiles: prod
+    application:
+        name: @project.name@
+...
+
+---
+server:
+    port: ${SERVER_PORT:5001}
+    tomcat:
+        max-connections: 2000
+        accept-count: 1000
+        max-threads: 1000
+...
+
+---
+eureka:
+    instance:
+        #preferIpAddress: true
+        #ip-address: ${spring.cloud.client.ipAddress}
+        #instance-id: ${spring.cloud.client.ipAddress}-${server.port}
+        #appname: ${spring.cloud.client.ipAddress}-${server.port}
+        hostname: ${HOSTNAME}
+        lease-expiration-duration-in-seconds: 40
+        lease-renewal-interval-in-seconds: 20
+        metadata-map:
+            user.name: ${security.user.name}
+            user.password: ${security.user.password}
+            management.context-path: ${management.context-path}
+        metadataMap:
+            user: ${security.user.name}
+            password: ${security.user.password}
+        statusPageUrl: http://${HOSTNAME}:${server.port}/${management.context-path}/info
+        healthCheckUrl: http://${HOSTNAME}:${server.port}/${management.context-path}/health
+        secure-health-check-url: http://${HOSTNAME}:${server.port}/${management.context-path}/health
+    client:
+        serviceUrl:
+            defaultZone: ${EUREKA_SERVER_ADDRESS:http://eurekaserver:1111/eureka/}
+...
+
+---
+spring:
+    cloud:
+        config:
+            profile: ${SPRING_PROFILES_ACTIVE}
+            label: master
+            name: p2p-server
+            uri: http://configserver:2001/
+            failFast: true
+            retry:
+                max-attempts: 10
+                initial-interval: 1000
+    sleuth:
+        sampler:
+            percentage: 1.0
+...
+
+---
+management:
+    context-path: /manage
+security:
+    user:
+        name: admin
+        password: 123456
+    basic:
+        enabled: true
+        path: ${management.context-path}
+...
+
+---
+hystrix:
+    threadpool:
+        default:
+            coreSize: 500
+    command:
+        default:
+            fallback:
+                isolation:
+                    thread:
+                        maxConcurrentRequests: 2000
+            execution:
+                isolation:
+                    strategy: THREAD
+                    thread:
+                        timeoutInMilliseconds: 10000
+                timeout:
+                    enabled: false
+zuul:
+    host:
+        maxTotalConnections: 2000
+        maxPerRouteConnections: 2000
+    semaphore:
+        maxSemaphores: 1000
+    #forceOriginalQueryStringEncoding: true
+...

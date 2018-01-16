@@ -1,0 +1,101 @@
+---
+spring:
+    profiles: dev
+    rabbitmq:
+        host: 192.168.10.18
+        port: 5672
+        username: user_admin
+        password: admin123%
+    redis:
+        host: 192.168.10.19
+        port: 6379
+        database: 0
+appstore:
+    masterHost: 51starpos.com
+    masterProtocol: https
+    address: http://139.224.133.239:7380/server/remote/cxf/slaveMessageService
+extadp:
+    url: http://106.14.81.177
+    port: 8623
+...
+
+---
+spring:
+    profiles: test
+    rabbitmq:
+        host: 10.0.1.42
+        port: 5672
+        username: user_admin
+        password: admin123%
+    redis:
+        host: 10.0.1.49
+        port: 9529
+        password: newland123@456!
+        database: 0
+appstore:
+    masterHost: 51starpos.com
+    masterProtocol: https
+    address: http://139.224.133.239:7380/server/remote/cxf/slaveMessageService
+extadp:
+    url: http://106.14.81.177
+    port: 8623
+...
+
+---
+spring:
+    profiles: prod
+    rabbitmq:
+        host: 10.0.1.46
+        port: 5672
+        username: user_admin
+        password: admin123%Prod
+    redis:
+        host: 10.0.1.47
+        port: 9529
+        password: newland123@456!
+        database: 0
+appstore:
+    masterHost: starpos.com.cn
+    masterProtocol: https
+    address: http://121.43.177.59/server/remote/cxf/slaveMessageService
+extadp:
+    url: http://gateway.starpos.com.cn
+    port: ""
+...
+
+---
+spring:
+    cloud:
+        bus:
+            trace:
+                enabled: true
+    session:
+        store-type: redis
+...
+
+---
+zuul:
+    addProxyHeaders: true
+    routes:
+        p2p:
+            path: /p2p/**
+            sensitiveHeaders:
+            serviceId: p2p-client${DEVLOPER_NAME:}
+        installment:
+            path: /installment/**
+            sensitiveHeaders:
+            serviceId: p2p-installment-client${DEVLOPER_NAME:}
+        extadp:
+            path: /extadp/**
+            sensitiveHeaders:
+            url: ${extadp.url}:${extadp.port}
+            stripPrefix: false
+...
+
+---
+ribbon:
+    restclient:
+        enabled: true
+    ConnectTimeout: 3000
+    ReadTimeout: 60000
+...
