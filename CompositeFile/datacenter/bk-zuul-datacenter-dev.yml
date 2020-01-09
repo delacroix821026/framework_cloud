@@ -1,0 +1,32 @@
+version: '3'
+services:
+    bkzuul:
+        image: nexusserver:8082/fw-zuul-server:latest
+        volumes:
+            - /home/DockerCommand/:/home/DockerCommand/
+        deploy:
+            replicas: 1
+            restart_policy:
+                condition: on-failure
+            resources:
+                limits:
+                    #cpus: '0.001'
+                    memory: 1026M
+                reservations:
+                    #cpus: '0.0001'
+                    memory: 64M
+                mem_swappines: 0
+        networks:
+            - docker-net
+        ports:
+            - "5101:5001"
+        environment:
+            SPRING_PROFILES_ACTIVE: dev
+            DEVLOPER_NAME: -dev
+            bk.onServer.enabled: "true"
+            SPRING_CLOUD_CONFIG_NAME: fw-zuul
+            BK_LOGSTASH_URL: "10.29.197.202:4560"
+networks:
+    docker-net:
+        external:
+            name: docker-net

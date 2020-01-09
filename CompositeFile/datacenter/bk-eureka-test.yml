@@ -1,0 +1,87 @@
+version: '3'
+services:
+    eurekaserver1:
+        image: nexusserver:8082/fw-eureka-server:latest
+        volumes:
+            - /home/DockerCommand/:/home/DockerCommand/
+        deploy:
+            restart_policy:
+                condition: on-failure
+            resources:
+                limits:
+                    #cpus: '0.001'
+                    memory: 1024M
+                reservations:
+                    #cpus: '0.0001'
+                    memory: 64M
+                mem_swappines: 0
+        networks:
+            docker-net:
+                aliases:
+                   - eurekaserver
+        ports:
+            - "1111:1111"
+        environment:
+            - spring.profiles.active=test
+            - ADDITIONAL_EUREKA_SERVER_LIST=http://eurekaserver2:1112/eureka/,http://eurekaserver3:1113/eureka/
+            - ADDITIONAL_HOSTNAME=eurekaserver1
+            - SERVER_PORT=1111
+
+    eurekaserver2:
+        image: nexusserver:8082/fw-eureka-server:latest
+        volumes:
+            - /home/DockerCommand/:/home/DockerCommand/
+        deploy:
+            restart_policy:
+                condition: on-failure
+            resources:
+                limits:
+                    #cpus: '0.001'
+                    memory: 1024M
+                reservations:
+                    #cpus: '0.0001'
+                    memory: 64M
+                mem_swappines: 0
+        networks:
+            docker-net:
+                aliases:
+                   - eurekaserver
+        ports:
+            - "1112:1111"
+        environment:
+            - spring.profiles.active=test
+            - ADDITIONAL_EUREKA_SERVER_LIST=http://eurekaserver1:1111/eureka/,http://eurekaserver3:1113/eureka/
+            - ADDITIONAL_HOSTNAME=eurekaserver2
+            - SERVER_PORT=1112
+
+    eurekaserver3:
+        image: nexusserver:8082/fw-eureka-server:latest
+        volumes:
+            - /home/DockerCommand/:/home/DockerCommand/
+        deploy:
+            restart_policy:
+                condition: on-failure
+            resources:
+                limits:
+                    #cpus: '0.001'
+                    memory: 1024M
+                reservations:
+                    #cpus: '0.0001'
+                    memory: 64M
+                mem_swappines: 0
+        networks:
+            docker-net:
+                aliases:
+                    - eurekaserver
+        ports:
+            - "1113:1111"
+        environment:
+            - spring.profiles.active=test
+            - ADDITIONAL_EUREKA_SERVER_LIST=http://eurekaserver1:1111/eureka/,http://eurekaserver2:1112/eureka/
+            - ADDITIONAL_HOSTNAME=eurekaserver3
+            - SERVER_PORT=1113
+
+networks:
+    docker-net:
+        external: true
+            #name: docker-net

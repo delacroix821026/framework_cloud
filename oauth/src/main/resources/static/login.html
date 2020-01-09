@@ -1,0 +1,65 @@
+<html>
+
+<head>
+    <title>Login Page</title>
+    <meta http-equiv="content-Type" content="text/html;charset=UTF-8" />
+    <script>
+        function myFunction(){
+            window.webkit.messageHandlers.isLoginSuccess.postMessage({
+                success: true,
+                userName: 'sueradmin'
+            });
+
+        }
+    </script>
+</head>
+
+<body onload='document.f.username.focus();'>
+<h3>Login with Username and Password 测试</h3>
+<form name='f' action='/login' method='POST'>
+    <table>
+        <tr>
+            <td>User:</td>
+            <td><input type='text' name='username' value=''></td>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td><input type='password' name='password' /></td>
+        </tr>
+        <tr>
+            <td colspan='2'><input name="submit" type="submit" value="Login" onclick="myFunction()" /></td>
+        </tr>
+    </table>
+</form>
+<script type="text/javascript" src="/webjars/js-cookie/js.cookie.js"></script>
+<script type="text/javascript">
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (settings.type == 'POST' || settings.type == 'PUT' ||
+                settings.type == 'DELETE') {
+                if (!(/^http:.*/.test(settings.url) || /^https:.*/
+                        .test(settings.url))) {
+                    // Only send the token to relative URLs i.e. locally.
+                    xhr.setRequestHeader("X-XSRF-TOKEN", Cookies
+                        .get('XSRF-TOKEN'));
+                }
+            }
+        }
+    });
+    /*$.get("/user", function (data) {
+        $("#user").html(data.userAuthentication.details.name);
+        $(".unauthenticated").hide();
+        $(".authenticated").show();
+    });
+    var logout = function () {
+        $.post("/logout", function () {
+            $("#user").html('');
+            $(".unauthenticated").show();
+            $(".authenticated").hide();
+        })
+        return true;
+    }*/
+</script>
+</body>
+
+</html>

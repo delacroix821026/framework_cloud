@@ -1,0 +1,58 @@
+version: '3'
+services:
+    redis01:
+        image: nexusserver:8082/redis-cluster:4.0.2
+        ports:
+            - "6379:6379"
+        networks:
+            docker-net:
+                aliases:
+                    - redis01
+
+    redis02:
+        image: nexusserver:8082/redis-cluster:4.0.2
+        ports:
+            - "6380:6379"
+        networks:
+            docker-net:
+                aliases:
+                    - redis02
+
+    redis03:
+        image: nexusserver:8082/redis-cluster:4.0.2
+        ports:
+            - "6381:6379"
+        networks:
+            docker-net:
+                aliases:
+                    - redis03
+
+    redis04:
+        image: nexusserver:8082/redis-cluster:4.0.2
+        ports:
+            - "6382:6379"
+        networks:
+           docker-net:
+               aliases:
+                   - redis04
+
+    redis05:
+        image: nexusserver:8082/redis-cluster:4.0.2
+        ports:
+            - "6383:6379"
+        networks:
+            docker-net:
+                aliases:
+                    - redis05
+
+    redis06:
+        image: nexusserver:8082/redis-cluster:4.0.2
+        ports:
+            - "6384:6379"
+        networks:
+            docker-net:
+                aliases:
+                    - redis06
+networks:
+    docker-net:
+        external: true

@@ -1,0 +1,30 @@
+version: '3'
+services:
+    fwconfig:
+        image: nexusserver:8083/config:latest
+        volumes:
+            - /home/DockerCommand/:/home/DockerCommand/
+        deploy:
+            replicas: 2
+            restart_policy:
+                condition: on-failure
+            resources:
+                limits:
+                    #cpus: '0.001'
+                    memory: 2046M
+                reservations:
+                    #cpus: '0.0001'
+                    memory: 64M
+        networks:
+            docker-net:
+                aliases:
+                    - configserver
+        ports:
+            - "2001:2001"
+        environment:
+            - SPRING_PROFILES_ACTIVE=local
+            - EUREKA_SERVER_ADDRESS=https://admin:philips1234@eurekaserver.baketechfin.com:1111/eureka/
+networks:
+    docker-net:
+        external: true
+            #name: docker-net

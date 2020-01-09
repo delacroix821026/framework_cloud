@@ -1,0 +1,97 @@
+#--server.port=9090 --spring.profiles.active=dev,--eureka.instance.hostname=configserver2
+HOSTNAME: ${spring.cloud.client.ipAddress}
+---
+spring:
+    profiles: local
+...
+
+---
+spring:
+    profiles: beta
+logging.level.root: ERROR
+...
+
+---
+spring:
+    profiles: prod
+server:
+logging.level.root: ERROR
+...
+
+
+---
+server:
+    port: ${SERVER_PORT:2001}
+...
+
+---
+spring:
+    cloud:
+        config:
+            server:
+                git:
+                    uri: http://gits.shjsqy.com/config_prod/project/config_center.git
+                    force-pull: true
+                    searchPaths: js*
+                    username: shjsqy
+                    password: shjsqy@2020
+                    repos:
+                        framework:
+                            uri: http://gits.shjsqy.com/config_prod/framework/config_center.git
+                            pattern: admin,logcent,turbine,oauth,gateway,fw-*
+                            cloneOnStart: true
+                            force-pull: true
+                            searchPaths: fw*
+                            username: shjsqy
+                            password: shjsqy@2020
+                health:
+                    enabled: false
+                #encrypt.enabled: false
+    application:
+        name: @project.name@
+    profiles:
+        active: ${SPRING_PROFILES_ACTIVE:dev}
+    boot:
+        admin:
+            client:
+                url: http://admin:6001
+                prefer-ip: true
+                username: ${spring.security.user.name}       #These two are needed so that the client
+                password: ${spring.security.user.password}   #can register at the protected server api
+                instance:
+                    metadata:
+                        user.name: ${spring.security.user.name}
+                        user.password: ${spring.security.user.password}
+    security:
+        user:
+            name: admin
+            password: philips1234
+...
+
+---
+eureka:
+    client:
+        serviceUrl:
+            defaultZone: ${EUREKA_SERVER_ADDRESS:http://admin:philips1234@eurekaserver.baketechfin.com:1111/eureka/}
+        healthcheck:
+            enabled: true
+    instance:
+        lease-expiration-duration-in-seconds: 40
+        lease-renewal-interval-in-seconds: 20
+...
+
+---
+management:
+    server:
+        port: 8080
+        ssl.enabled: false
+    endpoints:
+        web:
+            exposure:
+                include: "*"
+...
+
+---
+logging.file: "./target/config.log"
+logging.level.root: INFO
+...

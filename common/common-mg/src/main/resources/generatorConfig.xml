@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+	<context id="mysqltables" targetRuntime="MyBatis3">
+		<!-- 默认编码 -->
+		<property name="javaFileEncoding" value="UTF-8"/>
+		<!-- 当表名或列名是关键字时，自动加``包括 -->
+		<property name="autoDelimitKeywords" value="true"/>
+		<property name="beginningDelimiter" value="`"/>
+		<property name="endingDelimiter" value="`"/>
+		<!-- 序列化插件 -->
+		<plugin type="generator.plugins.EntitySerializablePlugin"></plugin>
+		<!-- class添加Base前缀 -->
+		<plugin type="generator.plugins.BaseClassPlugin"></plugin>
+		<!-- 插入生成 useGeneratedKeys keyProperty  -->
+		<plugin type="generator.plugins.MySQLGeneratorPrimaryKeyPlugin"></plugin>
+		<commentGenerator type="generator.plugins.CommentGenerator">
+			<property name="suppressAllComments" value="true" />
+			<property name="suppressDate" value="true" />
+		</commentGenerator>
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+		<!-- java model路径 -->
+		<javaModelGenerator targetPackage="com.ec.user.model"
+			targetProject="${project.basedir}/domain/src/main/java">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+		<!-- xml mapper路径 -->
+		<sqlMapGenerator targetPackage="com.ec.user.mapper"
+			targetProject="${project.basedir}/dao/src/main/resources">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+		<!-- java mapper路径 -->
+		<javaClientGenerator type="XMLMAPPER"
+			targetPackage="com.ec.user.mapper" targetProject="${project.basedir}/dao/src/main/java">
+			<property name="enableSubPackages" value="true" />
+			<property name="rootInterface" value="com.fw.common.entity.GenericMapper"/>
+		</javaClientGenerator>
+
+	</context>
+</generatorConfiguration>

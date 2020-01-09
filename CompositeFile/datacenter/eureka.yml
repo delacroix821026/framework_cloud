@@ -1,0 +1,81 @@
+version: '3'
+services:
+    eurekaserver1:
+        image: nexusserver:8083/eureka:latest
+        volumes:
+            - /home/DockerCommand/:/home/DockerCommand/
+        deploy:
+            restart_policy:
+                condition: on-failure
+            resources:
+                limits:
+                    #cpus: '0.001'
+                    memory: 2048M
+                reservations:
+                    #cpus: '0.0001'
+                    memory: 64M
+                #mem_swappines: 0
+        networks:
+            docker-net:
+                aliases:
+                   - eurekaserver.baketechfin.com
+                   - eurekaserver1.baketechfin.com
+        ports:
+            - "1111:1111"
+        environment:
+            - spring.profiles.active=server1
+
+    eurekaserver2:
+        image: nexusserver:8083/eureka:latest
+        volumes:
+            - /home/DockerCommand/:/home/DockerCommand/
+        deploy:
+            restart_policy:
+                condition: on-failure
+            resources:
+                limits:
+                    #cpus: '0.001'
+                    memory: 2048M
+                reservations:
+                    #cpus: '0.0001'
+                    memory: 64M
+                #mem_swappines: 0
+        networks:
+            docker-net:
+                aliases:
+                   - eurekaserver.baketechfin.com
+                   - eurekaserver2.baketechfin.com
+        ports:
+            - "1112:1111"
+        environment:
+            - spring.profiles.active=server2
+
+    eurekaserver3:
+        image: nexusserver:8083/eureka:latest
+        volumes:
+            - /home/DockerCommand/:/home/DockerCommand/
+        deploy:
+            restart_policy:
+                condition: on-failure
+            resources:
+                limits:
+                    #cpus: '0.001'
+                    memory: 2048M
+                reservations:
+                    #cpus: '0.0001'
+                    memory: 64M
+                #mem_swappines: 0
+        networks:
+            docker-net:
+                aliases:
+                    - eurekaserver.baketechfin.com
+                    - eurekaserver3.baketechfin.com
+        ports:
+            - "1113:1111"
+        environment:
+            - spring.profiles.active=server3
+
+networks:
+    docker-net:
+        external: true
+            #name: docker-net

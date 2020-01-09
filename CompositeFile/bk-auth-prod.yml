@@ -1,0 +1,32 @@
+version: '3'
+services:
+    bkauth:
+        image: nexusserver:8082/fw-auth-server:0.0.70
+        volumes:
+            - /home/DockerCommand/:/home/DockerCommand/
+        deploy:
+            replicas: 2
+            restart_policy:
+                condition: on-failure
+            resources:
+                limits:
+                    #cpus: '0.001'
+                    memory: 3072M
+                reservations:
+                    #cpus: '0.0001'
+                    memory: 64M
+                #mem_swappines: 0
+        networks:
+            docker-net:
+                aliases:
+                   - authserver
+        environment:
+            SPRING_PROFILES_ACTIVE: prod
+            DEVLOPER_NAME: "-bank0001"
+            BK.USER_SERVICE_ID: base-server
+            spring.config.location: "file:/home/DockerCommand/default/"
+            APPLICATION_NAME: auth
+networks:
+    docker-net:
+        external:
+            name: docker-net

@@ -1,0 +1,39 @@
+---
+spring:
+    profiles:
+        active: ${SPRING_PROFILES_ACTIVE:imitate}
+    application:
+        name: @project.name@${DEVLOPER_NAME:}
+...
+
+---
+spring:
+    profiles: imitate
+    cloud:
+        config:
+            uri: http://120.27.232.66:2001/
+...
+
+---
+spring:
+    profiles: prod
+    cloud:
+        config:
+            label: master
+...
+
+---
+spring:
+    cloud:
+        config:
+            uri: http://configserver:2001/
+            profile: prod
+            label: ${spring.profiles.active}
+            name: @project.name@
+            failFast: true
+            retry:
+                max-attempts: 10
+                initial-interval: 1000
+            username: admin
+            password: philips1234
+...

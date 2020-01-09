@@ -1,0 +1,34 @@
+version: '3'
+services:
+    bkconfig:
+        image: nexusserver:8082/fw-config-server:0.0.50
+        volumes:
+            - /home/DockerCommand/:/home/DockerCommand/
+        deploy:
+            replicas: 2
+            restart_policy:
+                condition: on-failure
+            resources:
+                limits:
+                    #cpus: '0.001'
+                    memory: 4096M
+                reservations:
+                    #cpus: '0.0001'
+                    memory: 64M
+                #mem_swappines: 0
+        networks:
+            docker-net:
+                aliases:
+                    - configserver
+        ports:
+            - "2001:2001"
+        environment:
+            - SPRING_PROFILES_ACTIVE=prod
+            - EUREKA_SERVER_ADDRESS=https://operator:bakejinfu2108@eurekaserver.baketechfin.com:1111/eureka/
+            - SERVER_PORT = 2001
+            - spring.config.location=file:/home/DockerCommand/config/
+
+networks:
+    docker-net:
+        external: true
+            #name: docker-net

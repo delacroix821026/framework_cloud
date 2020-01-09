@@ -1,0 +1,33 @@
+version: '3'
+services:
+    bkauth:
+        image: nexusserver:8082/fw-admin-server:0.0.74
+        volumes:
+            - /home/DockerCommand/:/home/DockerCommand/
+        deploy:
+            restart_policy:
+                condition: on-failure
+            resources:
+                limits:
+                    #cpus: '0.001'
+                    memory: 2048M
+                reservations:
+                    #cpus: '0.0001'
+                    memory: 64M
+                #mem_swappines: 0
+        networks:
+            docker-net:
+                aliases:
+                    - bkadmin
+        ports:
+            - "6001:6001"
+        environment:
+            SPRING_PROFILES_ACTIVE: prod
+            DEVLOPER_NAME: "-bank0001"
+            spring.config.location: "file:/home/DockerCommand/default/"
+            APPLICATION_NAME: admin
+            SPRING_CLOUD_CONFIG_NAME: bkadmin
+networks:
+    docker-net:
+        external:
+            name: docker-net

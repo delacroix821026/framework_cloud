@@ -1,0 +1,44 @@
+facebook:
+  client:
+    clientId: bkproject
+    clientSecret: admin
+    accessTokenUri: http://localhost:4000/oauth/token
+    userAuthorizationUri: http://localhost:4000/oauth/authorize
+    clientAuthenticationScheme: header
+  resource:
+    userInfoUri: http://localhost:4000/me
+    tokenInfoUri: http://localhost:4000/oauth/check_token
+    preferTokenInfo: true
+
+github:
+  client:
+    clientId: bd1c0a783ccdd1c9b9e4
+    clientSecret: 1a9030fbca47a5b2c28e92f19050bb77824b5ad1
+    accessTokenUri: https://github.com/login/oauth/access_token
+    userAuthorizationUri: https://github.com/login/oauth/authorize
+    clientAuthenticationScheme: form
+  resource:
+    userInfoUri: https://api.github.com/user
+
+logging:
+  level:
+    org.springframework.security: INFO
+
+server:
+  port: 8080
+
+spring:
+  redis:
+    database: 2
+    host: 116.62.54.64
+    port: 8529
+    password: bk_framework@456!
+    lettuce:
+      pool:
+        max-active: 8 # Maximum number of connections that can be allocated by the pool at a given time. Use a negative value for no limit.
+        max-idle: 8 # Maximum number of "idle" connections in the pool. Use a negative value to indicate an unlimited number of idle connections.
+        max-wait: -1ms # Maximum amount of time a connection allocation should block before throwing an exception when the pool is exhausted. Use a negative value to block indefinitely.
+        min-idle: 0 # Target for the minimum number of idle connections to maintain in the pool. This setting only has an effect if it is positive.
+      shutdown-timeout: 100ms # Shutdown timeout.
+  session:
+    store-type: redis

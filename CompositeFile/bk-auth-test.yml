@@ -1,0 +1,33 @@
+version: '3'
+services:
+    bkauth:
+        image: nexusserver:8082/fw-auth-server:latest
+        volumes:
+            - /home/DockerCommand/:/home/DockerCommand/
+        deploy:
+            replicas: 1
+            restart_policy:
+                condition: on-failure
+            resources:
+                limits:
+                    #cpus: '0.001'
+                    memory: 1026M
+                reservations:
+                    #cpus: '0.0001'
+                    memory: 64M
+        networks:
+            - docker-net
+        ports:
+            - "4000:4000"
+        environment:
+            SPRING_PROFILES_ACTIVE: test
+            DEVLOPER_NAME: -test
+            BANK_NAME: -bank0001
+        extra_hosts:
+            configserver: 10.142.31.142
+            eurekaserver: 10.142.31.142
+
+networks:
+    docker-net:
+        external:
+            name: docker-net

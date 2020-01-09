@@ -1,0 +1,34 @@
+version: '3'
+services:
+    bkzuul:
+        image: nexusserver:8082/fw-zuul-server:latest
+        volumes:
+            - /home/DockerCommand/:/home/DockerCommand/
+        deploy:
+            replicas: 1
+            restart_policy:
+                condition: on-failure
+            resources:
+                limits:
+                    #cpus: '0.001'
+                    memory: 1026M
+                reservations:
+                    #cpus: '0.0001'
+                    memory: 64M
+        networks:
+            - docker-net
+        ports:
+            - "5001:5001"
+            - "5201:8080"
+        environment:
+            SPRING_PROFILES_ACTIVE: test
+            DEVLOPER_NAME: -bank0001-test
+            bk.onServer.enabled: "true"
+        extra_hosts:
+            configserver: 10.142.31.142
+            eurekaserver: 10.142.31.142
+
+networks:
+    docker-net:
+        external:
+            name: docker-net

@@ -1,0 +1,31 @@
+version: '3'
+services:
+    bkauth:
+        image: nexusserver:8082/fw-auth-server:latest
+        volumes:
+            - /home/DockerCommand/:/home/DockerCommand/
+        deploy:
+            replicas: 2
+            restart_policy:
+                condition: on-failure
+            resources:
+                limits:
+                    #cpus: '0.001'
+                    memory: 1026M
+                reservations:
+                    #cpus: '0.0001'
+                    memory: 64M
+                mem_swappines: 0
+        networks:
+            docker-net:
+                aliases:
+                   - authserver
+        environment:
+            SPRING_PROFILES_ACTIVE: test
+            DEVLOPER_NAME: -test
+            BK.USER_SERVICE_ID: base-server
+            SPRING_CLOUD_CONFIG_NAME: fw-auth
+networks:
+    docker-net:
+        external:
+            name: docker-net

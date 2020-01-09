@@ -1,0 +1,87 @@
+version: '3'
+services:
+    bkconfig:
+        image: nexusserver:8082/fw-config-server:latest
+        volumes:
+            - /home/DockerCommand/:/home/DockerCommand/
+        deploy:
+            replicas: 1
+            restart_policy:
+                condition: on-failure
+            resources:
+                limits:
+                    #cpus: '0.001'
+                    memory: 1024M
+                reservations:
+                    #cpus: '0.0001'
+                    memory: 64M
+
+        networks:
+            docker-net:
+                aliases:
+                    - configserver
+        ports:
+            - "2001:2001"
+        environment:
+            - SPRING_PROFILES_ACTIVE=test
+            - EUREKA_SERVER_ADDRESS=http://eurekaserver:1111/eureka/
+            - SERVER_PORT = 2001
+
+    bkadmin:
+        image: nexusserver:8082/fw-admin-server:latest
+        volumes:
+            - /home/DockerCommand/:/home/DockerCommand/
+        depends_on:
+            - bkconfig
+        deploy:
+            restart_policy:
+                condition: on-failure
+            resources:
+                limits:
+                    #cpus: '0.001'
+                    memory: 1024M
+                reservations:
+                    #cpus: '0.0001'
+                    memory: 64M
+        networks:
+            docker-net:
+                aliases:
+                    - bkadmin
+        ports:
+            - "6001:6001"
+        environment:
+            - SPRING_PROFILES_ACTIVE=test
+            - EUREKA_SERVER_ADDRESS=http://eurekaserver:1111/eureka/
+            - EUREKA_INSTANCE_HOSTNAME=bkadmin
+            - SERVER_PORT = 6001
+    bkturbine:
+        image: nexusserver:8082/fw-turbine-server:latest
+        volumes:
+            - /home/DockerCommand/:/home/DockerCommand/
+        depends_on:
+            - bkconfig
+        deploy:
+            restart_policy:
+                condition: on-failure
+            resources:
+                limits:
+                    #cpus: '0.001'
+                    memory: 1024M
+                reservations:
+                    #cpus: '0.0001'
+                    memory: 64M
+        networks:
+            docker-net:
+                aliases:
+                    - bkturbine
+        ports:
+            - "6002:6002"
+        environment:
+            - SPRING_PROFILES_ACTIVE=test
+            - EUREKA_SERVER_ADDRESS=http://eurekaserver:1111/eureka/
+            - EUREKA_INSTANCE_HOSTNAME=bkturbine
+            - SERVER_PORT = 6002
+networks:
+    docker-net:
+        external:
+            name: docker-net

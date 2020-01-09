@@ -1,0 +1,91 @@
+version: '3'
+services:
+    bk-logcent:
+        image: nexusserver:8082/fw-logcent:latest
+        volumes:
+            - /home/DockerCommand/:/home/DockerCommand/
+        deploy:
+            restart_policy:
+                condition: on-failure
+            resources:
+                limits:
+                    #cpus: '0.001'
+                    memory: 1024M
+                reservations:
+                    #cpus: '0.0001'
+                    memory: 64M
+        networks:
+            docker-net:
+                aliases:
+                    - p2p-logcent
+        ports:
+            - "6011:6011"
+        environment:
+            - SPRING_PROFILES_ACTIVE=dev
+            - SERVER_PORT=6011
+            - DEVLOPER_NAME=dev
+        extra_hosts:
+            configserver: 10.142.31.142
+            eurekaserver: 10.142.31.142
+    bkadmin:
+        image: nexusserver:8082/fw-admin-server:latest
+        volumes:
+            - /home/DockerCommand/:/home/DockerCommand/
+        depends_on:
+            - bkconfig
+        deploy:
+            restart_policy:
+                condition: on-failure
+            resources:
+                limits:
+                    #cpus: '0.001'
+                    memory: 2046M
+                reservations:
+                    #cpus: '0.0001'
+                    memory: 64M
+        networks:
+            docker-net:
+                aliases:
+                    - bkadmin
+        ports:
+            - "6001:6001"
+        environment:
+            - SPRING_PROFILES_ACTIVE=dev
+            - EUREKA_INSTANCE_HOSTNAME=bkadmin
+            - SERVER_PORT = 6001
+        extra_hosts:
+            configserver: 10.142.31.142
+            eurekaserver: 10.142.31.142
+    bkturbine:
+        image: nexusserver:8082/fw-turbine-server:latest
+        volumes:
+            - /home/DockerCommand/:/home/DockerCommand/
+        depends_on:
+            - bkconfig
+        deploy:
+            restart_policy:
+                condition: on-failure
+            resources:
+                limits:
+                    #cpus: '0.001'
+                    memory: 1024M
+                reservations:
+                    #cpus: '0.0001'
+                    memory: 64M
+        networks:
+            docker-net:
+                aliases:
+                    - bkturbine
+        ports:
+            - "6002:6002"
+        environment:
+            - SPRING_PROFILES_ACTIVE=dev
+            - EUREKA_INSTANCE_HOSTNAME=bkturbine
+            - SERVER_PORT = 6002
+        extra_hosts:
+            configserver: 10.142.31.142
+            eurekaserver: 10.142.31.142
+networks:
+    docker-net:
+        external:
+            name: docker-net

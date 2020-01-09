@@ -1,29 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-    <groupId>com.newland.financial</groupId>
-    <artifactId>p2p</artifactId>
-    <version>1.0.3-SNAPSHOT</version>
-    <name>p2p</name>
+    <groupId>com.fw</groupId>
+    <artifactId>framework</artifactId>
+    <version>2.0.48-SNAPSHOT</version>
     <packaging>pom</packaging>
+    <name>framework</name>
+    <description />
 
+    <!-- Sub project modules -->
     <modules>
-        <module>p2p_common</module>
-        <module>p2p_eureka</module>
-        <module>p2p_config</module>
-        <module>p2p_admin</module>
-        <module>p2p_logcent</module>
-        <module>p2p_turbine</module>
-        <module>p2p_zuul</module>
+        <module>eureka</module>
+        <!--<module>config</module>
+        <module>admin</module>-->
+
+        <!--<module>oauth</module>
+        <module>gateway</module>-->
+
+        <module>common</module>
+        <!--<module>bk_turbine</module>-->
+        <!--<module>resource</module>-->
+
+        <!--<module>nono</module>-->
     </modules>
 
+    <!-- 项目属性 -->
     <properties>
+        <!-- environment setting -->
+        <jdk.version>1.8</jdk.version>
+        <spring.boot.version>2.2.1.RELEASE</spring.boot.version>
+        <spring.cloud.version>Hoxton.RELEASE</spring.cloud.version>
+        <project.build.plugins.plugin.version>3.6.0</project.build.plugins.plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <docker.image.prefix>p2p</docker.image.prefix>
+
+        <!-- docker跳过打包 -->
+        <docker.skipBuild>false</docker.skipBuild>
+        <!-- docker发布 -->
+        <docker.skipPush>false</docker.skipPush>
+        <!-- docker release跳过打包 -->
+        <docker.release.skipBuild>true</docker.release.skipBuild>
+        <!-- docker release发布 -->
+        <docker.release.skipPush>true</docker.release.skipPush>
+        <!-- checkStyle控制台输出 -->
+        <checkstyle.consoleOutput>true</checkstyle.consoleOutput>
+        <!-- checkStyle错误中断发布 -->
+        <checkstyle.failOnViolation>true</checkstyle.failOnViolation>
+        <!-- checkStyle跳过检验 -->
+        <checkstyle.skip>false</checkstyle.skip>
+        <!-- junit跳过测试 -->
+        <junit.skipTests>true</junit.skipTests>
+        <!-- junit错误中断发布 -->
+        <junit.testFailureIgnore>true</junit.testFailureIgnore>
     </properties>
 
     <dependencyManagement>
@@ -32,51 +60,425 @@
                 <!-- Import dependency management from Spring Boot -->
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>1.5.6.RELEASE</version>
+                <version>${spring.boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>Dalston.SR3</version>
+                <version>${spring.cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <dependency>
+                <groupId>com.fw</groupId>
+                <artifactId>common-orm</artifactId>
+                <version>2.0.48-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fw</groupId>
+                <artifactId>common-web</artifactId>
+                <version>2.0.48-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fw</groupId>
+                <artifactId>common-web-cloud</artifactId>
+                <version>2.0.48-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fw</groupId>
+                <artifactId>common-session</artifactId>
+                <version>2.0.48-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fw</groupId>
+                <artifactId>common-dfs</artifactId>
+                <version>2.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fw</groupId>
+                <artifactId>common-io</artifactId>
+                <version>2.0.48-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fw</groupId>
+                <artifactId>common-sso</artifactId>
+                <version>2.0.48-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fw</groupId>
+                <artifactId>common-core</artifactId>
+                <version>2.0.48-SNAPSHOT</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
+    <!-- 依赖项定义 -->
+
     <profiles>
         <profile>
-            <id>jdk_complier</id>
-            <build>
-                <defaultGoal>compile</defaultGoal>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <version>3.1</version>
-                        <configuration>
-                            <source>1.8</source>
-                            <target>1.8</target>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
+            <id>alpha</id>
+            <properties>
+                <msgGroup>2</msgGroup>
+                <DEVLOPER_NAME>-bank0001</DEVLOPER_NAME>
+                <jvmArguments />
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>beta</id>
+            <properties>
+                <msgGroup>2|3</msgGroup>
+                <DEVLOPER_NAME>-bank0001</DEVLOPER_NAME>
+                <jvmArguments />
+            </properties>
+        </profile>
+        <profile>
+            <id>training</id>
+            <properties>
+                <msgGroup>2|3|</msgGroup>
+                <DEVLOPER_NAME>-bank0001</DEVLOPER_NAME>
+                <jvmArguments />
+            </properties>
+        </profile>
+        <profile>
+            <id>bugfix</id>
+            <properties>
+                <msgGroup>2|3|4</msgGroup>
+                <DEVLOPER_NAME>-bank0001</DEVLOPER_NAME>
+                <jvmArguments />
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <profile>prod</profile>
+                <jvmArguments />
+            </properties>
+        </profile>
+        <profile>
+            <id>debug</id>
+            <properties>
+                <jvmArguments>
+                    -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=${debug_address}
+                </jvmArguments>
+            </properties>
         </profile>
     </profiles>
 
-
-
-
     <build>
-        <finalName>p2p</finalName>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.fw</groupId>
+                    <artifactId>bk_k8s_mp</artifactId>
+                    <version>1.0.13</version>
+                    <executions>
+                        <execution>
+                            <phase>install</phase>
+                            <goals>
+                                <goal>generate</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.1</version>
+                    <configuration>
+                        <source>${jdk.version}</source>
+                        <target>${jdk.version}</target>
+                        <encoding>UTF-8</encoding>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>compile</id>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>build-info</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>package</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <!-- 指定该Main Class为全局的唯一入口 -->
+                        <mainClass>com.fw.Application</mainClass>
+                        <layout>ZIP</layout>
+                        <attach>false</attach>
+                        <!--
+                            <excludeArtifactIds>p2p_installment_server_domain, p2p_installment_server_dao， p2p_installment_server_service</excludeArtifactIds>
+                        -->
+                        <jvmArguments>
+                            ${jvmArguments}
+                        </jvmArguments>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>com.spotify</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <version>1.0.0</version>
+                    <executions>
+                        <execution>
+                            <id>push-image</id>
+                            <phase>install</phase>
+                            <goals>
+                                <goal>build</goal>
+                                <goal>push</goal>
+                            </goals>
+                            <configuration>
+                                <skipDockerBuild>${docker.skipBuild}</skipDockerBuild>
+                                <skipDockerPush>${docker.skipPush}</skipDockerPush>
+                                <imageName>test-image.shjsqy.com/${project.build.finalName}</imageName>
+                                <registryUrl>http://test-image.shjsqy.com/</registryUrl>
+                                <imageTags>
+                                    <imageTag>${project.version}</imageTag>
+                                </imageTags>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>push-image-release</id>
+                            <phase>install</phase>
+                            <goals>
+                                <goal>build</goal>
+                                <goal>push</goal>
+                            </goals>
+                            <configuration>
+                                <skipDockerBuild>${docker.release.skipBuild}</skipDockerBuild>
+                                <skipDockerPush>${docker.release.skipPush}</skipDockerPush>
+                                <imageName>prd-image.shjsqy.com/${project.build.finalName}</imageName>
+                                <registryUrl>http://prd-image.shjsqy.com/</registryUrl>
+                                <imageTags>
+                                    <imageTag>${project.version}</imageTag>
+                                </imageTags>
+                            </configuration>
+                        </execution>
+                    </executions>
+                    <configuration>
+
+                        <!--<registryUrl>https://index.docker.io/v1/</registryUrl>-->
+                        <baseImage>daocloud.io/library/java:latest</baseImage>
+
+                        <!--<cmd>docker login 192.168.10.38:8082 -u admin -p admin123%</cmd>-->
+                        <volumes>
+                            <volume>/tmp</volume>
+                        </volumes>
+
+                        <entryPoint>[ "sh", "-c", "/home/DockerCommand/SetJVM.sh \"${project.build.finalName}\"" ]
+                        </entryPoint>
+                        <!--<dockerDirectory>docker</dockerDirectory>-->
+                        <resources>
+                            <resource>
+                                <targetPath>/</targetPath>
+                                <directory>${project.build.directory}</directory>
+                                <include>${project.build.finalName}.jar</include>
+                            </resource>
+                        </resources>
+                        <forceTags>true</forceTags>
+                        <serverId>nexus</serverId>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.5</version>
+                    <configuration>
+                        <additionalClasspathElements>
+                            <!-- the following two lines, causes intellij coverage to stop working -->
+                            <additionalClasspathElement>${project.build.sourceDirectory}</additionalClasspathElement>
+                            <additionalClasspathElement>${project.build.testSourceDirectory}</additionalClasspathElement>
+                        </additionalClasspathElements>
+                        <skip>true</skip>
+                        <testFailureIgnore>${junit.testFailureIgnore}</testFailureIgnore>
+                        <argLine>${surefireArgLine}</argLine>
+
+                        <systemProperties>
+                            <property>
+                                <name>DEVLOPER_NAME</name>
+                                <value>test</value>
+                            </property>
+                            <property>
+                                <name>SPRING_PROFILES_ACTIVE</name>
+                                <value>${profile.active}</value>
+                            </property>
+                        </systemProperties>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>run-integration-test</id>
+                            <phase>site</phase>
+                            <goals>
+                                <goal>test</goal>
+                            </goals>
+                            <configuration>
+                                <skip>${junit.skipTests}</skip>
+                                <testFailureIgnore>${junit.testFailureIgnore}</testFailureIgnore>
+                                <argLine>${surefireArgLine}</argLine>
+                                <includes>
+                                    <include>**/integration/**/*.java</include>
+                                </includes>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>run-test</id>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>test</goal>
+                            </goals>
+                            <configuration>
+                                <skip>${junit.skipTests}</skip>
+                                <testFailureIgnore>${junit.testFailureIgnore}</testFailureIgnore>
+                                <argLine>${surefireArgLine}</argLine>
+                                <includes>
+                                    <include>**/unit/**/*.java</include>
+                                </includes>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!-- 单元测试代码覆盖率 -->
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.7.8</version>
+                    <configuration>
+                        <skip>${junit.skipTests}</skip>
+                        <output>file</output>
+                        <append>true</append>
+                    </configuration>
+                    <executions>
+                        <!--
+                           准备指向Jacoco运行时Agent的属性，在测试执行之前传递给虚拟机参数
+                        -->
+                        <execution>
+                            <id>pre-unit-test</id>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                            <configuration>
+                                <!-- 设置覆盖率数据文件路径 -->
+                                <destFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</destFile>
+                                <!-- 设置属性名称，Maven surefire插件需要引用这个作为命令行参数
+                                -->
+                                <propertyName>surefireArgLine</propertyName>
+                            </configuration>
+                        </execution>
+                        <!--
+                            确保在单元测试执行之后生成覆盖率报告
+                        -->
+                        <execution>
+                            <id>post-unit-test</id>
+                            <phase>post-integration-test</phase>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                            <configuration>
+                                <!-- 引用覆盖率文件的路径-->
+                                <dataFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</dataFile>
+                                <!-- 设置覆盖率报告存放路径. -->
+                                <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>2.16</version>
+                    <executions>
+                        <execution>
+                            <id>default-integration-test</id>
+                            <goals>
+                                <goal>integration-test</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!-- 代码规范检测 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>3.0.0</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.fw</groupId>
+                            <artifactId>common-core</artifactId>
+                            <version>${project.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>com.puppycrawl.tools</groupId>
+                            <artifactId>checkstyle</artifactId>
+                            <version>7.2</version>
+                        </dependency>
+                    </dependencies>
+                    <executions>
+                        <execution>
+                            <id>validate</id>
+                            <phase>validate</phase>
+                            <configuration>
+                                <!--<cacheFile>${project.build.directory}/site/checkstyle/checkstyle-cachefile</cacheFile>-->
+                                <configLocation>/sun-checkstyle.xml</configLocation>
+                                <!--<propertiesLocation>checkstyle.properties</propertiesLocation>-->
+                                <encoding>UTF-8</encoding>
+                                <consoleOutput>true</consoleOutput>
+                                <!--<failsOnError>true</failsOnError>
+                                <skip>true</skip>-->
+                                <failOnViolation>true</failOnViolation>
+
+                                <outputFile>${project.reporting.outputDirectory}/checkstyle/checkstyle.xml</outputFile>
+                            </configuration>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!-- 生成javadoc -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.6.0</version>
+                    <configuration>
+                        <aggregate>true</aggregate>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>aggregate</id>
+                            <goals>
+                                <goal>aggregate</goal>
+                            </goals>
+                            <phase>site</phase>
+                            <configuration>
+                                <!--<includeDependencySources>true</includeDependencySources>-->
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
+            </plugins>
+
+        </pluginManagement>
+
         <plugins>
             <!-- 子项目版本控制 -->
             <plugin>
@@ -84,20 +486,82 @@
                 <artifactId>versions-maven-plugin</artifactId>
                 <version>2.4</version>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>3.0.0-M1</version>
+                <configuration>
+                    <allowReleasePluginSnapshot>true</allowReleasePluginSnapshot>
+
+                    <encoding>UTF-8</encoding>
+                    <tagNameFormat>@{project.version}</tagNameFormat>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <nonFilteredFileExtensions>
+                        <nonFilteredFileExtension>jks</nonFilteredFileExtension>
+                    </nonFilteredFileExtensions>
+                </configuration>
+            </plugin>
+
+      <!--      <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>-->
+
+            <!-- 动态加载 -->
+            <plugin>
+                <groupId>org.zeroturnaround</groupId>
+                <artifactId>jrebel-maven-plugin</artifactId>
+                <version>1.1.7</version>
+                <executions>
+                    <execution>
+                        <id>generate-rebel-xml</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
     </build>
 
+    <scm>
+        <developerConnection>scm:git:http://gits.bakejinfu.com/java-framwork/framework2.git</developerConnection>
+        <connection>scm:git:http://gits.bakejinfu.com/java-framwork/framework2.git</connection>
+        <url>gits.bakejinfu.com</url>
+        <tag>2.0.45-SNAPSHOT</tag>
+    </scm>
 
+    <!-- 发布jar包到私有云 -->
     <distributionManagement>
         <repository>
             <id>nexus</id>
             <name>Releases</name>
-            <url>http://nexusserver:8081/repository/p2p_maven_release</url>
+            <url>http://nexus.shjsqy.com/repository/maven_release/</url>
         </repository>
         <snapshotRepository>
             <id>nexus</id>
             <name>Snapshot</name>
-            <url>http://nexusserver:8081/repository/p2p_maven_snapshot</url>
+            <url>http://nexus.shjsqy.com/repository/maven_snapshot/</url>
         </snapshotRepository>
     </distributionManagement>
 </project>

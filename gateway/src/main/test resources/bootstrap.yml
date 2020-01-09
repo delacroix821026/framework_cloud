@@ -1,0 +1,39 @@
+---
+spring:
+    profiles:
+        active: ${SPRING_PROFILES_ACTIVE:local}
+    application:
+        name: gateway${DEVLOPER_NAME:}
+...
+
+---
+spring:
+    profiles: local
+    cloud:
+        config:
+            uri: http://config.shjsqy.com/
+...
+
+---
+spring:
+    profiles: prod
+    cloud:
+        config:
+            label: master
+...
+
+---
+spring:
+    cloud:
+        config:
+            uri: http://configserver:2001/
+            profile: prod
+            label: ${spring.profiles.active}
+            name: gateway
+            failFast: true
+            retry:
+                max-attempts: 10
+                initial-interval: 1000
+            username: admin
+            password: philips1234
+...

@@ -1,0 +1,125 @@
+#spring-boot:run -Drun.arguments=--server.port=1111,--spring.profiles.active=dev,--eureka.instance.hostname=eurekaserver1
+#spring-boot:run -Drun.arguments=--server.port=1112,--spring.profiles.active=dev,--eureka.instance.hostname=eurekaserver2
+#spring-boot:run -Drun.arguments=--server.port=1113,--spring.profiles.active=dev,--eureka.instance.hostname=eurekaserver3
+---
+spring:
+    profiles: stand
+    boot:
+        admin:
+            client:
+                registerWithEureka: false
+                fetchRegistry: false
+                url: http://localhost:6001
+eureka:
+    client:
+        serviceUrl:
+            defaultZone: ${ADDITIONAL_EUREKA_SERVER_LIST:http://admin:philips1234@localhost:1111/eureka/}
+server:
+    port: ${SERVER_PORT:1111}
+...
+
+---
+spring:
+    profiles: server1
+eureka:
+    instance:
+        hostname: eurekaserver1
+server:
+    port: ${SERVER_PORT:1111}
+    #ssl:
+    #    key-store: classpath:baketechfin.jks
+    #    key-store-password: bake@2017
+    #    key-password: bake@2017
+logging.level.root: ERROR
+...
+
+---
+spring:
+    profiles: server2
+eureka:
+    instance:
+        hostname: eurekaserver2
+server:
+    port: ${SERVER_PORT:1112}
+    #ssl:
+    #    key-store: classpath:baketechfin.jks
+    #    key-store-password: bake@2017
+    #    key-password: bake@2017
+logging.level.root: ERROR
+...
+
+---
+spring:
+    profiles: server3
+eureka:
+    instance:
+        hostname: eurekaserver3
+server:
+    port: ${SERVER_PORT:1113}
+    #ssl:
+    #    key-store: classpath:baketechfin.jks
+    #    key-store-password: bake@2017
+    #    key-password: bake@2017
+logging.level.root: ERROR
+...
+
+---
+spring:
+    application:
+        name: "@project.name@"
+    boot:
+        admin:
+            client:
+                url: http://admin:6001
+                prefer-ip: true
+                username: ${spring.security.user.name}       #These two are needed so that the client
+                password: ${spring.security.user.password}   #can register at the protected server api
+                instance:
+                    metadata:
+                        user.name: ${spring.security.user.name}
+                        user.password: ${spring.security.user.password}
+    security:
+        user:
+            name: admin
+            password: philips1234
+
+...
+
+---
+eureka:
+    instance:
+        metadata-map:
+            user.name: ${spring.security.user.name}
+            user.password: ${spring.security.user.password}
+            management.port: ${management.server.port}
+        #statusPageUrl: http://${eureka.instance.hostname}:${management.port}/${management.context-path}/info
+        #healthCheckUrl: http://${eureka.instance.hostname}:${management.port}/${management.context-path}/health
+        #secure-health-check-url: http://${eureka.instance.hostname}:${management.port}/${management.context-path}/health
+    server:
+        enable-self-preservation: false
+        eviction-interval-timer-in-ms: 10000
+    healthcheck:
+        enabled: true
+    client:
+        register-with-eureka: true
+        fetch-registry: true
+        serviceUrl:
+            defaultZone: ${ADDITIONAL_EUREKA_SERVER_LIST:http://admin:philips1234@eurekaserver1:1111/eureka/,http://admin:philips1234@eurekaserver2:1112/eureka/,http://admin:philips1234@eurekaserver3:1113/eureka/}
+    leaseRenewalIntervalInSeconds: 10
+...
+
+---
+management:
+    server:
+        port: 8080
+        ssl.enabled: false
+    endpoints:
+        web:
+            exposure:
+                include: "*"
+...
+---
+logging.file: "./target/eureka.log"
+logging.level.root: INFO
+...
+

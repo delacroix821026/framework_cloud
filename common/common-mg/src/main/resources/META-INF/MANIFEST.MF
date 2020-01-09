@@ -1,0 +1,39 @@
+Manifest-Version: 1.0
+Bundle-License: https://www.apache.org/licenses/LICENSE-2.0.txt
+Bundle-SymbolicName: org.mybatis.generator.mybatis-generator-maven-plu
+ gin
+Built-By: jeffbutler
+Bnd-LastModified: 1530739653926
+Specification-Title: MyBatis Generator Maven Plugin
+Implementation-Vendor-Id: org.mybatis.generator
+Bundle-DocURL: http://www.mybatis.org/mybatis-generator/mybatis-genera
+ tor-maven-plugin/
+Include-Resource: META-INF/LICENSE=LICENSE,META-INF/NOTICE=NOTICE
+Import-Package: javax.xml.parsers,org.apache.maven.artifact,org.apache
+ .maven.model,org.apache.maven.plugin,org.apache.maven.plugin.logging,
+ org.apache.maven.project,org.mybatis.generator.api,org.mybatis.genera
+ tor.config,org.mybatis.generator.config.xml,org.mybatis.generator.exc
+ eption,org.mybatis.generator.internal,org.mybatis.generator.internal.
+ util,org.mybatis.generator.internal.util.messages,org.mybatis.generat
+ or.logging,org.w3c.dom,org.xml.sax
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.6))"
+Implementation-Build-Date: 2018-07-04 21:25:32+0000
+Export-Package: org.mybatis.generator.maven;version="1.3.7"
+Bundle-Name: MyBatis Generator Maven Plugin
+Implementation-Title: MyBatis Generator Maven Plugin
+Bundle-Description: Maven plugin for MyBatis Generator.
+Implementation-Version: 1.3.7
+Specification-Vendor: MyBatis.org
+Bundle-ManifestVersion: 2
+Bundle-Vendor: MyBatis.org
+Tool: Bnd-3.3.0.201609221906
+Implementation-Vendor: MyBatis.org
+Bundle-Version: 1.3.7
+X-Compile-Target-JDK: 1.6
+X-Compile-Source-JDK: 1.6
+Created-By: Apache Maven Bundle Plugin
+Build-Jdk: 1.8.0_171
+Specification-Version: 1.3.7
+Implementation-URL: http://www.mybatis.org/mybatis-generator/mybatis-g
+ enerator-maven-plugin/
+

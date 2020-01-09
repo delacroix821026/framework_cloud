@@ -1,0 +1,64 @@
+---
+spring:
+    profiles:
+        active: ${SPRING_PROFILES_ACTIVE:alpha}
+    application:
+        name: @project.name@${DEVLOPER_NAME:}
+HOSTNAME: ${spring.cloud.client.ipAddress}
+...
+---
+spring:
+    profiles: local
+    cloud:
+        config:
+            uri: https://testdc.baketechfin.com:2001/
+...
+---
+spring:
+    profiles: alpha
+    cloud:
+        config:
+            uri: https://testdc.baketechfin.com:2001/
+...
+---
+spring:
+    profiles: beta
+    cloud:
+        config:
+            uri: https://testdc.baketechfin.com:2001/
+...
+---
+spring:
+    profiles: bugfix
+    cloud:
+        config:
+            uri: https://testdc.baketechfin.com:2001/
+...
+---
+spring:
+    profiles: training
+    cloud:
+        config:
+            uri: https://testdc.baketechfin.com:2001/
+...
+---
+spring:
+    profiles: prod
+    cloud:
+        config:
+            uri: https://dc.baketechfin.com:2001/
+...
+---
+spring:
+    cloud:
+        config:
+            profile: prod
+            label: ${SPRING_PROFILES_ACTIVE}
+            name: @project.name@
+            failFast: true
+            retry:
+                max-attempts: 10
+                initial-interval: 1000
+            username: admin
+            password: bakejinfu@2108
+...

@@ -1,0 +1,32 @@
+version: '3'
+services:
+    p2p-logcent:
+        image: nexusserver:8082/fw-logcent:latest
+        volumes:
+            - /home/DockerCommand/:/home/DockerCommand/
+        deploy:
+            restart_policy:
+                condition: on-failure
+            resources:
+                limits:
+                    #cpus: '0.001'
+                    memory: 1024M
+                reservations:
+                    #cpus: '0.0001'
+                    memory: 64M
+        networks:
+            docker-net:
+                aliases:
+                    - p2p-logcent
+        ports:
+            - "6011:6011"
+        environment:
+            - SPRING_PROFILES_ACTIVE=test
+            - EUREKA_SERVER_ADDRESS=http://eurekaserver:1111/eureka/
+            - SERVER_PORT=6011
+            - DEVLOPER_NAME=test
+
+networks:
+    docker-net:
+        external:
+            name: docker-net

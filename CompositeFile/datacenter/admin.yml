@@ -1,0 +1,30 @@
+version: '3'
+services:
+    fwadmin:
+        image: nexusserver:8083/admin:latest
+        volumes:
+            - /home/DockerCommand/:/home/DockerCommand/
+        depends_on:
+            - fwconfig
+        deploy:
+            restart_policy:
+                condition: on-failure
+            resources:
+                limits:
+                    #cpus: '0.001'
+                    memory: 2046M
+                reservations:
+                    #cpus: '0.0001'
+                    memory: 64M
+        networks:
+            docker-net:
+                aliases:
+                    - admin
+        ports:
+            - "6001:6001"
+        environment:
+            - SPRING_PROFILES_ACTIVE=dev
+networks:
+    docker-net:
+        external:
+            name: docker-net

@@ -1,0 +1,93 @@
+version: '3'
+services:
+    eurekaserver1:
+        image: nexusserver:8082/fw-eureka-server:0.0.50
+        volumes:
+            - /home/DockerCommand/:/home/DockerCommand/
+        deploy:
+            restart_policy:
+                condition: on-failure
+            resources:
+                limits:
+                    #cpus: '0.001'
+                    memory: 4096M
+                reservations:
+                    #cpus: '0.0001'
+                    memory: 64M
+                #mem_swappines: 0
+        networks:
+            docker-net:
+                aliases:
+                   - eurekaserver.baketechfin.com
+                   - eurekaserver1.baketechfin.com
+        ports:
+            - "1111:1111"
+        environment:
+            - spring.profiles.active=prod
+            - ADDITIONAL_EUREKA_SERVER_LIST=https://operator:bakejinfu2108@eurekaserver2.baketechfin.com:1112/eureka/,https://operator:bakejinfu2108@eurekaserver3.baketechfin.com:1113/eureka/
+            - ADDITIONAL_HOSTNAME=eurekaserver1.baketechfin.com
+            - SERVER_PORT=1111
+            - spring.config.location=file:/home/DockerCommand/eureka/
+
+    eurekaserver2:
+        image: nexusserver:8082/fw-eureka-server:0.0.50
+        volumes:
+            - /home/DockerCommand/:/home/DockerCommand/
+        deploy:
+            restart_policy:
+                condition: on-failure
+            resources:
+                limits:
+                    #cpus: '0.001'
+                    memory: 4096M
+                reservations:
+                    #cpus: '0.0001'
+                    memory: 64M
+                #mem_swappines: 0
+        networks:
+            docker-net:
+                aliases:
+                   - eurekaserver.baketechfin.com
+                   - eurekaserver2.baketechfin.com
+        ports:
+            - "1112:1111"
+        environment:
+            - spring.profiles.active=prod
+            - ADDITIONAL_EUREKA_SERVER_LIST=https://operator:bakejinfu2108@eurekaserver1.baketechfin.com:1111/eureka/,https://operator:bakejinfu2108@eurekaserver3.baketechfin.com:1113/eureka/
+            - ADDITIONAL_HOSTNAME=eurekaserver2.baketechfin.com
+            - SERVER_PORT=1112
+            - spring.config.location=file:/home/DockerCommand/eureka/
+
+    eurekaserver3:
+        image: nexusserver:8082/fw-eureka-server:0.0.50
+        volumes:
+            - /home/DockerCommand/:/home/DockerCommand/
+        deploy:
+            restart_policy:
+                condition: on-failure
+            resources:
+                limits:
+                    #cpus: '0.001'
+                    memory: 4096M
+                reservations:
+                    #cpus: '0.0001'
+                    memory: 64M
+                #mem_swappines: 0
+        networks:
+            docker-net:
+                aliases:
+                    - eurekaserver.baketechfin.com
+                    - eurekaserver3.baketechfin.com
+        ports:
+            - "1113:1111"
+        environment:
+            - spring.profiles.active=prod
+            - ADDITIONAL_EUREKA_SERVER_LIST=https://operator:bakejinfu2108@eurekaserver1.baketechfin.com:1111/eureka/,https://operator:bakejinfu2108@eurekaserver2.baketechfin.com:1112/eureka/
+            - ADDITIONAL_HOSTNAME=eurekaserver3.baketechfin.com
+            - SERVER_PORT=1113
+            - spring.config.location=file:/home/DockerCommand/eureka/
+
+networks:
+    docker-net:
+        external: true
+            #name: docker-net

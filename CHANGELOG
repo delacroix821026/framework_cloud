@@ -1,0 +1,7 @@
+todo
+动态加载权限
+csrf
+oauth启动报错，manage端口启动前注册了admin报错。
+支撑token访问
+重复生成 mapper.xml 追加 而非覆盖
+feign loadbalance分离
