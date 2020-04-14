@@ -130,19 +130,4 @@ public class AliyunStorage implements Storage {
     public String generateUrl(String keyName) {
         return getBaseUrl() + keyName;
     }
-
-    /*public static void main(String[] args) throws Exception {
-        AliyunStorage storage = new AliyunStorage();
-        storage.setEndpoint("oss-cn-shanghai.aliyuncs.com");
-        storage.setAccessKeyId("LTAI4Fm4EEdWugtNaZUX9q3Z");
-        storage.setAccessKeySecret("wJq7oxxTO2n1QHu7nJNuoqqqEaM3ej");
-        storage.setBucketName("jswl");
-        File file = new File("/Users/daijuancen/Desktop/WechatIMG189.jpeg");
-        //storage.store(new FileInputStream(file), file.length(), "image/png", "namii");
-        Date date = new Date();
-
-        URL url =  storage.getOSSClient().generatePresignedUrl(storage.getBucketName(), "namii", new Date(date.getTime() + 100000000));
-        System.out.print(url.toString());
-
-    }*/
 }
