@@ -13,7 +13,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<poi.version>3.15</poi.version>
-		<xstream.version>1.4.7</xstream.version>
+		<xstream.version>1.4.17</xstream.version>
 	</properties>
 	
 	<dependencies>
